@@ -9,7 +9,7 @@ export const Register = async (req, res) => {
     if (user) {
         return res.status(400).json({
             success: false,
-            message: "Email is Alredy Exist"
+            message: "Email is Alredy Exist",
         })
     }
 
@@ -48,9 +48,6 @@ export const Login = async (req, res) => {
             });
         }
 
-        // If UserId and Password match, set cookie with user _id
-        // res.cookie("userCookie", user._id, { httpOnly: true });
-
         res.status(200).json({
             success: true,
             message: "Successfully Logged In",
@@ -61,14 +58,11 @@ export const Login = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Internal Server Error",
-
         });
     }
 };
 
 
-
-//res.clearCookie("UserId");
 export const Logout = (req, res) => {
     res.json({
         success: true,

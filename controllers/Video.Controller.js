@@ -2,7 +2,7 @@ import Video from "../models/VideoModel.js"
 
 export const GetVideos = async (req, res) => {
     try {
-        const videos = await Video.find(); // Retrieve all videos from the database
+        const videos = await Video.find();
         res.status(200).json({
             success: true,
             message: "Videos retrieved successfully",
@@ -47,26 +47,40 @@ export const AddVideo = async (req, res) => {
 
 
 export const GetVideoById = async (req, res) => {
+    try {
+        const id = req.params.id;
 
-    const id = req.body.params
+        const video = await Video.findOne({ VideoId: id });
 
-    const video = await Video.findOne({ id })
+        if (!video) {
+            return res.status(404).json({
+                success: false,
+                message: "Video not found",
+            });
+        }
 
-    res.status(200).json({
-        success: true,
-        message: "Successfully Get Video_id from video",
-        video
-    })
-}
+        res.status(200).json({
+            success: true,
+            message: "Successfully retrieved video by ID",
+            video,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while retrieving the video",
+            error: error.message,
+        });
+    }
+};
 
 
 export const EditVideo = async (req, res) => {
 
-    const id = req.body.params
+    const id = req.params.id;
 
     const { VideoId, Title, Url, Likes, Dislikes, Views, Comments } = req.body;
 
-    const video = await Video.findOne({ id })
+    const video = await Video.findOne({ VideoId: id })
 
     video.Title = Title,
         video.VideoId = VideoId,
@@ -89,9 +103,9 @@ export const EditVideo = async (req, res) => {
 
 export const DeleteVideo = async (req, res) => {
 
-    const id = req.body.params
+    const id = req.params.id;
 
-    const video = await Video.findOne({ id })
+    const video = await Video.findOne({ VideoId: id })
 
     await video.deleteOne()
 
